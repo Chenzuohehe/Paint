@@ -14,6 +14,7 @@
 		BC622F671C7BE7970093A755 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BC622F661C7BE7970093A755 /* Images.xcassets */; };
 		BC622F6A1C7BE7970093A755 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC622F681C7BE7970093A755 /* LaunchScreen.xib */; };
 		BC622F761C7BE7980093A755 /* __Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = BC622F751C7BE7980093A755 /* __Tests.m */; };
+		BC622F811C7BE7C70093A755 /* PaintBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = BC622F801C7BE7C70093A755 /* PaintBoard.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,8 @@
 		BC622F6F1C7BE7980093A755 /* 画板Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "画板Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC622F741C7BE7980093A755 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BC622F751C7BE7980093A755 /* __Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = __Tests.m; sourceTree = "<group>"; };
+		BC622F7F1C7BE7C70093A755 /* PaintBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaintBoard.h; sourceTree = "<group>"; };
+		BC622F801C7BE7C70093A755 /* PaintBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaintBoard.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +88,8 @@
 				BC622F5E1C7BE7970093A755 /* AppDelegate.m */,
 				BC622F601C7BE7970093A755 /* ViewController.h */,
 				BC622F611C7BE7970093A755 /* ViewController.m */,
+				BC622F7F1C7BE7C70093A755 /* PaintBoard.h */,
+				BC622F801C7BE7C70093A755 /* PaintBoard.m */,
 				BC622F631C7BE7970093A755 /* Main.storyboard */,
 				BC622F661C7BE7970093A755 /* Images.xcassets */,
 				BC622F681C7BE7970093A755 /* LaunchScreen.xib */,
@@ -222,6 +227,7 @@
 				BC622F621C7BE7970093A755 /* ViewController.m in Sources */,
 				BC622F5F1C7BE7970093A755 /* AppDelegate.m in Sources */,
 				BC622F5C1C7BE7970093A755 /* main.m in Sources */,
+				BC622F811C7BE7C70093A755 /* PaintBoard.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
