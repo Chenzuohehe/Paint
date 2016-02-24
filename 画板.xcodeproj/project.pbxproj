@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04E0D1621C7DA5F9006355D2 /* PaintBoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E0D1611C7DA5F9006355D2 /* PaintBoardView.m */; };
 		BC622F5C1C7BE7970093A755 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BC622F5B1C7BE7970093A755 /* main.m */; };
 		BC622F5F1C7BE7970093A755 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BC622F5E1C7BE7970093A755 /* AppDelegate.m */; };
 		BC622F621C7BE7970093A755 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BC622F611C7BE7970093A755 /* ViewController.m */; };
@@ -28,6 +29,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		04E0D1601C7DA5F9006355D2 /* PaintBoardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaintBoardView.h; sourceTree = "<group>"; };
+		04E0D1611C7DA5F9006355D2 /* PaintBoardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaintBoardView.m; sourceTree = "<group>"; };
 		BC622F561C7BE7970093A755 /* 画板.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "画板.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC622F5A1C7BE7970093A755 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BC622F5B1C7BE7970093A755 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -88,6 +91,8 @@
 				BC622F5E1C7BE7970093A755 /* AppDelegate.m */,
 				BC622F601C7BE7970093A755 /* ViewController.h */,
 				BC622F611C7BE7970093A755 /* ViewController.m */,
+				04E0D1601C7DA5F9006355D2 /* PaintBoardView.h */,
+				04E0D1611C7DA5F9006355D2 /* PaintBoardView.m */,
 				BC622F7F1C7BE7C70093A755 /* PaintBoard.h */,
 				BC622F801C7BE7C70093A755 /* PaintBoard.m */,
 				BC622F631C7BE7970093A755 /* Main.storyboard */,
@@ -227,6 +232,7 @@
 				BC622F621C7BE7970093A755 /* ViewController.m in Sources */,
 				BC622F5F1C7BE7970093A755 /* AppDelegate.m in Sources */,
 				BC622F5C1C7BE7970093A755 /* main.m in Sources */,
+				04E0D1621C7DA5F9006355D2 /* PaintBoardView.m in Sources */,
 				BC622F811C7BE7C70093A755 /* PaintBoard.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -422,6 +428,7 @@
 				BC622F7B1C7BE7980093A755 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BC622F7C1C7BE7980093A755 /* Build configuration list for PBXNativeTarget "画板Tests" */ = {
 			isa = XCConfigurationList;
@@ -430,6 +437,7 @@
 				BC622F7E1C7BE7980093A755 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
