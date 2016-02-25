@@ -21,13 +21,8 @@
 {
     _rubber = [UIButton buttonWithType:UIButtonTypeCustom];
     _rubber.frame = CGRectMake(self.frame.size.width/2 - 10, 20, 80, 80);
-    _rubber.layer.borderWidth = 4;
-    _rubber.layer.borderColor = [UIColor blackColor].CGColor;
+    
     _rubber.userInteractionEnabled = YES;
-    [_rubber setTitle:@"路飞的橡皮擦" forState:UIControlStateNormal];
-    [_rubber setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    _rubber.titleLabel.numberOfLines = 0;
-    _rubber.backgroundColor = [UIColor whiteColor];
     
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pressPan:)];
     [_rubber addGestureRecognizer:pan];
