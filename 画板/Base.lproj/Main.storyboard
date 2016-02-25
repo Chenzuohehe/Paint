@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -16,11 +17,75 @@
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Kd-GO-nYA" customClass="PaintBoard">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <subviews>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Rv6-Ey-gtk">
+                                        <rect key="frame" x="7" y="17" width="118" height="31"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="114" id="kjb-qO-xJe"/>
+                                            <constraint firstAttribute="height" constant="30" id="rAd-fg-0j3"/>
+                                        </constraints>
+                                        <color key="thumbTintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    </slider>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="aKp-0i-08H">
+                                        <rect key="frame" x="7" y="105" width="118" height="31"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="114" id="J9z-UI-bOf"/>
+                                            <constraint firstAttribute="height" constant="30" id="b4V-YT-rx9"/>
+                                        </constraints>
+                                        <color key="thumbTintColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    </slider>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ih8-71-rLv">
+                                        <rect key="frame" x="131" y="17" width="23" height="118"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="23" id="Ght-Iw-Vmj"/>
+                                            <constraint firstAttribute="height" constant="118" id="q05-ys-zia"/>
+                                        </constraints>
+                                    </view>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="ZMe-bg-z6c">
+                                        <rect key="frame" x="7" y="61" width="118" height="31"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="7cM-gH-qGb"/>
+                                            <constraint firstAttribute="width" constant="114" id="y8w-jM-Yvu"/>
+                                        </constraints>
+                                        <color key="thumbTintColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    </slider>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="ih8-71-rLv" firstAttribute="leading" secondItem="aKp-0i-08H" secondAttribute="trailing" constant="8" id="68I-Zv-zkm"/>
+                                    <constraint firstItem="ih8-71-rLv" firstAttribute="top" secondItem="5Kd-GO-nYA" secondAttribute="top" constant="17" id="6sM-yy-lI7"/>
+                                    <constraint firstItem="ZMe-bg-z6c" firstAttribute="top" secondItem="Rv6-Ey-gtk" secondAttribute="bottom" constant="14" id="8Eu-Cz-AJu"/>
+                                    <constraint firstItem="aKp-0i-08H" firstAttribute="leading" secondItem="5Kd-GO-nYA" secondAttribute="leading" constant="9" id="CK8-eD-N1g"/>
+                                    <constraint firstItem="Rv6-Ey-gtk" firstAttribute="top" secondItem="5Kd-GO-nYA" secondAttribute="top" constant="17" id="GJp-Xe-8gJ"/>
+                                    <constraint firstItem="aKp-0i-08H" firstAttribute="top" secondItem="ZMe-bg-z6c" secondAttribute="bottom" constant="14" id="WNY-DO-V0l"/>
+                                    <constraint firstItem="Rv6-Ey-gtk" firstAttribute="leading" secondItem="5Kd-GO-nYA" secondAttribute="leading" constant="9" id="d5P-OL-a91"/>
+                                    <constraint firstItem="ZMe-bg-z6c" firstAttribute="leading" secondItem="5Kd-GO-nYA" secondAttribute="leading" constant="9" id="fbH-mn-myy"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="5Kd-GO-nYA" secondAttribute="trailing" constant="-20" id="K9g-Gr-y7E"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="5Kd-GO-nYA" secondAttribute="bottom" id="RMG-hn-a7v"/>
+                            <constraint firstItem="5Kd-GO-nYA" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-20" id="bCP-Lh-fod"/>
+                            <constraint firstItem="5Kd-GO-nYA" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="topMargin" id="d9k-5P-apy"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="blueSlider" destination="aKp-0i-08H" id="tcu-0q-CVX"/>
+                        <outlet property="greenSlider" destination="ZMe-bg-z6c" id="62T-hT-4gn"/>
+                        <outlet property="patintView" destination="5Kd-GO-nYA" id="mVf-Ug-wj4"/>
+                        <outlet property="redSlider" destination="Rv6-Ey-gtk" id="5lH-MY-QWV"/>
+                        <outlet property="testView" destination="ih8-71-rLv" id="Rck-pS-YV3"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="305" y="429"/>
         </scene>
     </scenes>
 </document>

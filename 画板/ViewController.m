@@ -10,6 +10,11 @@
 #import "PaintBoard.h"
 
 @interface ViewController ()
+@property (weak, nonatomic) IBOutlet UISlider *redSlider;
+@property (weak, nonatomic) IBOutlet UISlider *greenSlider;
+@property (weak, nonatomic) IBOutlet UISlider *blueSlider;
+@property (weak, nonatomic) IBOutlet UIView *testView;
+@property (weak, nonatomic) IBOutlet PaintBoard *patintView;
 
 @end
 
@@ -17,11 +22,22 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
-    PaintBoard *paint = [[PaintBoard alloc] initWithFrame:self.view.bounds];
-    paint.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:paint];
     
+    [self.redSlider addTarget:self action:@selector(sliderChange:) forControlEvents:UIControlEventValueChanged];
+    [self.greenSlider addTarget:self action:@selector(sliderChange:) forControlEvents:UIControlEventValueChanged];
+    [self.blueSlider addTarget:self action:@selector(sliderChange:) forControlEvents:UIControlEventValueChanged];
+    self.testView.backgroundColor = [UIColor colorWithRed:self.redSlider.value green:self.greenSlider.value blue:self.blueSlider.value alpha:1];
+    
+    
+}
+
+- (void)sliderChange:(UISlider *)slider
+{
+    self.redSlider.minimumTrackTintColor = [UIColor colorWithRed:self.redSlider.value green:0 blue:0 alpha:1];
+    self.greenSlider.minimumTrackTintColor = [UIColor colorWithRed:0 green:self.greenSlider.value blue:0 alpha:1];
+    self.blueSlider.minimumTrackTintColor = [UIColor colorWithRed:0 green:0 blue:self.blueSlider.value alpha:1];
+    self.testView.backgroundColor = [UIColor colorWithRed:self.redSlider.value green:self.greenSlider.value blue:self.blueSlider.value alpha:1];
+    self.patintView.penColor = [UIColor colorWithRed:self.redSlider.value green:self.greenSlider.value blue:self.blueSlider.value alpha:1];
 }
 
 @end

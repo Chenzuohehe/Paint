@@ -10,4 +10,6 @@
 
 @interface PaintBoard : UIView
 
+@property (nonatomic, strong)UIColor * penColor;
+
 @end

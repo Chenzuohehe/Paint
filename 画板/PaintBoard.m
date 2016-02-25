@@ -17,11 +17,32 @@
     NSMutableArray *_aPoints;
 }
 
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    if (self = [super initWithFrame:frame]) {
+        _points = [NSMutableArray new];
+        _aPoints = [NSMutableArray new];
+//        self.backgroundColor = [UIColor blackColor];
+        [self createRubber];
+    }
+    return self;
+}
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super initWithCoder:aDecoder]) {
+        _points = [NSMutableArray new];
+        _aPoints = [NSMutableArray new];
+//        self.backgroundColor = [UIColor blackColor];
+        [self createRubber];
+    }
+    return self;
+}
+
 - (void)createRubber
 {
     _rubber = [UIButton buttonWithType:UIButtonTypeCustom];
     _rubber.frame = CGRectMake(self.frame.size.width/2 - 10, 20, 80, 80);
-    
+    [_rubber setBackgroundImage:[UIImage imageNamed:@"Eraser"] forState:UIControlStateNormal];
     _rubber.userInteractionEnabled = YES;
     
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pressPan:)];
@@ -53,16 +74,7 @@
     }
 }
 
-- (instancetype)initWithFrame:(CGRect)frame
-{
-    if (self = [super initWithFrame:frame]) {
-        _points = [NSMutableArray new];
-        _aPoints = [NSMutableArray new];
-        self.backgroundColor = [UIColor blackColor];
-        [self createRubber];
-    }
-    return self;
-}
+
 
 - (void)drawRect:(CGRect)rect {
     // Drawing code
@@ -70,7 +82,7 @@
         return;
     }
     else {
-        [[UIColor redColor] setStroke];
+        [self.penColor setStroke];
 
         CGContextRef context = UIGraphicsGetCurrentContext();
         for (NSMutableArray *thisStroke in _points) {
