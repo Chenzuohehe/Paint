@@ -10,19 +10,21 @@
 
 @implementation PaintBoard
 {
-    // 保存路径的数组
-    NSMutableArray *_points;
+    
+    NSMutableArray *_points;// 保存路径的数组
     UIButton *_rubber;
-    // 保存橡皮擦的路径的数组
-    NSMutableArray *_aPoints;
+    
+    NSMutableArray *_aPoints;// 保存橡皮擦的路径的数组
+    
+    NSMutableArray * allPoints;//一个保存所有图层的数组，每一个点击就是一个图层
 }
+
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
         _points = [NSMutableArray new];
         _aPoints = [NSMutableArray new];
-//        self.backgroundColor = [UIColor blackColor];
         [self createRubber];
     }
     return self;
@@ -32,7 +34,6 @@
     if (self = [super initWithCoder:aDecoder]) {
         _points = [NSMutableArray new];
         _aPoints = [NSMutableArray new];
-//        self.backgroundColor = [UIColor blackColor];
         [self createRubber];
     }
     return self;
@@ -44,45 +45,84 @@
     _rubber.frame = CGRectMake(self.frame.size.width/2 - 10, 20, 80, 80);
     [_rubber setBackgroundImage:[UIImage imageNamed:@"Eraser"] forState:UIControlStateNormal];
     _rubber.userInteractionEnabled = YES;
-    
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pressPan:)];
     [_rubber addGestureRecognizer:pan];
     [self addSubview:_rubber];
 }
 
+#pragma mark  ----- touchPaint ----
+//橡皮移动
 - (void)pressPan:(UIPanGestureRecognizer *)pan{
     static CGPoint oldPoint;
+    //橡皮按住。。
     if (pan.state == UIGestureRecognizerStateBegan) {
         oldPoint = [pan locationInView:self];
         NSMutableArray *arr = [NSMutableArray new];
         [_aPoints addObject:arr];
     }
     else {
+        //橡皮滑动
         CGPoint newPoint = [pan locationInView:self];
 //        CGPoint point = [_rubber convertPoint:newPoint toView:self];
         CGPoint center = _rubber.center;
-        center.x += newPoint.x - oldPoint.x;
-        center.y += newPoint.y - oldPoint.y;
+        center.x += (newPoint.x - oldPoint.x);
+        center.y += (newPoint.y - oldPoint.y);
         _rubber.center = center;
         NSMutableArray *arr = _aPoints.lastObject;
         [arr addObject:NSStringFromCGPoint(newPoint)];
 
         oldPoint = newPoint;
-        NSLog(@"%ld", _aPoints.count);
+        NSLog(@"%@",NSStringFromCGPoint(oldPoint));
+//        NSLog(@"%ld", _aPoints.count);
         [self setNeedsDisplay];
 
     }
 }
 
+// 一个笔画开始(点击)
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [touches anyObject];
+    
+    CGPoint point = [touch locationInView:self];
+    
+    // 一个数组代表一个笔画  起点
+    NSMutableArray *thisStroke = [NSMutableArray new];
+    [thisStroke addObject:NSStringFromCGPoint(point)];
+    // 保存多条路径开始的点
+    [_points addObject:thisStroke];
+}
+
+// 手指移动
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [touches anyObject];
+    CGPoint point = [touch locationInView:self];
+    
+    [[_points lastObject] addObject:NSStringFromCGPoint(point)];
+    
+    // 重绘（为什么要重绘？）
+    // drawRect方法 不能直接调用 间接调用
+    [self setNeedsDisplay];
+    
+    //    if (CGRectContainsPoint(_rubber.frame, point)) {
+    //        CGPoint oldPoint = [touch previousLocationInView:self];
+    //        CGPoint newpoint = [touch locationInView:self];
+    //        _rubber.center = CGPointMake(_rubber.center.x + newpoint.x - oldPoint.x, _rubber.center.y + newpoint.y- oldPoint.y);
+    //    }
+}
 
 
+//所有绘图的移动(渲染？)
+#pragma mark  ----- 渲染？ ----
 - (void)drawRect:(CGRect)rect {
     // Drawing code
+    
     if (_points.count == 0) {
         return;
     }
     else {
-        [self.penColor setStroke];
+        [self.penColor setStroke];//这是设置渲染的颜色
 
         CGContextRef context = UIGraphicsGetCurrentContext();
         for (NSMutableArray *thisStroke in _points) {
@@ -126,38 +166,6 @@
 }
 
 
-// 一个笔画开始
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    UITouch *touch = [touches anyObject];
-    
-    CGPoint point = [touch locationInView:self];
-    
-    // 一个数组代表一个笔画  起点
-    NSMutableArray *thisStroke = [NSMutableArray new];
-    [thisStroke addObject:NSStringFromCGPoint(point)];
-    // 保存多条路径开始的点
-    [_points addObject:thisStroke];
-}
-
-// 手指移动
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    UITouch *touch = [touches anyObject];
-    CGPoint point = [touch locationInView:self];
-        
-    [[_points lastObject] addObject:NSStringFromCGPoint(point)];
-    
-    // 重绘
-    // drawRect方法 不能直接调用 间接调用
-    [self setNeedsDisplay];
-
-//    if (CGRectContainsPoint(_rubber.frame, point)) {
-//        CGPoint oldPoint = [touch previousLocationInView:self];
-//        CGPoint newpoint = [touch locationInView:self];
-//        _rubber.center = CGPointMake(_rubber.center.x + newpoint.x - oldPoint.x, _rubber.center.y + newpoint.y- oldPoint.y);
-//    }
-}
 
 //- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
 //{
