@@ -16,7 +16,7 @@
     
     NSMutableArray *_aPoints;// 保存橡皮擦的路径的数组
     
-    NSMutableArray * allPoints;//一个保存所有图层的数组，每一个点击就是一个图层
+    
 }
 
 
@@ -25,6 +25,7 @@
     if (self = [super initWithFrame:frame]) {
         _points = [NSMutableArray new];
         _aPoints = [NSMutableArray new];
+        self.allPoints = [NSMutableArray array];
         [self createRubber];
     }
     return self;
@@ -34,8 +35,10 @@
     if (self = [super initWithCoder:aDecoder]) {
         _points = [NSMutableArray new];
         _aPoints = [NSMutableArray new];
+        self.allPoints = [NSMutableArray array];
         [self createRubber];
     }
+    
     return self;
 }
 
@@ -48,6 +51,8 @@
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pressPan:)];
     [_rubber addGestureRecognizer:pan];
     [self addSubview:_rubber];
+    
+    
 }
 
 #pragma mark  ----- touchPaint ----
@@ -86,11 +91,24 @@
     
     CGPoint point = [touch locationInView:self];
     
-    // 一个数组代表一个笔画  起点
+    // 一个数组代表一个完整的线  起点
     NSMutableArray *thisStroke = [NSMutableArray new];
     [thisStroke addObject:NSStringFromCGPoint(point)];
     // 保存多条路径开始的点
     [_points addObject:thisStroke];
+    
+    
+    NSMutableDictionary * strokeDic = [NSMutableDictionary dictionary];
+    
+    if (_penColor ==nil) {
+        _penColor = [UIColor blackColor];
+    }
+    
+    [strokeDic setObject:_penColor forKey:@"penColor"];
+    [strokeDic setObject:thisStroke forKey:@"path"];
+    [self.allPoints addObject:strokeDic];
+    
+    NSLog(@"allPonint%@",self.allPoints);
 }
 
 // 手指移动
@@ -99,7 +117,17 @@
     UITouch *touch = [touches anyObject];
     CGPoint point = [touch locationInView:self];
     
-    [[_points lastObject] addObject:NSStringFromCGPoint(point)];
+//    [[_points lastObject] addObject:NSStringFromCGPoint(point)];
+    
+    NSMutableDictionary * strokeDic = [self.allPoints lastObject];
+    NSMutableArray * strokeArr = strokeDic[@"path"];
+    [strokeArr addObject:NSStringFromCGPoint(point)];
+    [strokeDic setObject:strokeArr forKey:@"path"];
+    [self.allPoints removeLastObject];
+    [self.allPoints addObject:strokeDic];
+    
+    
+    NSLog(@"allPonint%@",self.allPoints);
     
     // 重绘（为什么要重绘？）
     // drawRect方法 不能直接调用 间接调用
@@ -115,55 +143,85 @@
 
 //所有绘图的移动(渲染？)
 #pragma mark  ----- 渲染？ ----
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-    
-    if (_points.count == 0) {
-        return;
-    }
-    else {
-        [self.penColor setStroke];//这是设置渲染的颜色
-
-        CGContextRef context = UIGraphicsGetCurrentContext();
-        for (NSMutableArray *thisStroke in _points) {
-            CGContextSetLineWidth(context, 20);
-
-            // 路径起点
-            CGPoint startPoint = CGPointFromString(thisStroke[0]);
-            CGContextMoveToPoint(context, startPoint.x, startPoint.y);
-            // 划线
-            for (NSInteger i = 1; i < thisStroke.count; i++) {
-                CGPoint movePoint = CGPointFromString(thisStroke[i]);
+- (void)drawRect:(CGRect)rect
+{
+    context = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(context);
+//    CGContextRestoreGState(context);
+    if (self.allPoints.count != 0) {
+        for (NSMutableDictionary * strokeDic in self.allPoints) {
+            
+            NSLog(@"ttttt%@",strokeDic);
+            
+            CGContextRestoreGState(context);
+            CGContextSaveGState(context);
+            
+            UIColor * color = [strokeDic objectForKey:@"penColor"];
+            
+            [color setStroke];
+            NSMutableArray * strokeArr = [strokeDic objectForKey:@"path"];
+            CGPoint statPoint = CGPointFromString(strokeArr[0]);
+            CGContextMoveToPoint(context, statPoint.x, statPoint.y);
+            for (int i = 1; i < strokeArr.count; i++) {
+                CGPoint movePoint = CGPointFromString(strokeArr[i]);
                 CGContextAddLineToPoint(context, movePoint.x, movePoint.y);
+                
             }
+            CGContextStrokePath(context);
         }
-        // 渲染路径
-        CGContextStrokePath(context);
     }
-    
-    if (_aPoints.count != 0) {
-        [[UIColor whiteColor] setStroke];
-        CGContextRef context = UIGraphicsGetCurrentContext();
-
-        for (NSMutableArray *thisStroke in _aPoints) {
-            CGContextSetLineWidth(context, 30);
-
-            // 路径起点
-            CGPoint startPoint = CGPointFromString(thisStroke[0]);
-            CGContextMoveToPoint(context, startPoint.x, startPoint.y);
-            // 划线
-            for (NSInteger i = 1; i < thisStroke.count; i++) {
-                CGPoint movePoint = CGPointFromString(thisStroke[i]);
-                CGContextAddLineToPoint(context, movePoint.x, movePoint.y);
-
-            }
-        }
-        CGContextStrokePath(context);
- 
-    }
-
-
 }
+
+//- (void)drawRect:(CGRect)rect {
+//    // Drawing code
+//    
+//    if (_points.count == 0) {
+//        return;
+//    }
+//    else {
+//        [self.penColor setStroke];//这是设置渲染的颜色
+//        
+//        //获取自己创建的位图上下文
+//        CGContextRef context = UIGraphicsGetCurrentContext();
+//        for (NSMutableArray *thisStroke in _points) {
+//            CGContextSetLineWidth(context, 1);
+//
+//            // 路径起点
+//            CGPoint startPoint = CGPointFromString(thisStroke[0]);
+//            CGContextMoveToPoint(context, startPoint.x, startPoint.y);
+//            // 划线
+//            for (NSInteger i = 1; i < thisStroke.count; i++) {
+//                CGPoint movePoint = CGPointFromString(thisStroke[i]);
+//                CGContextAddLineToPoint(context, movePoint.x, movePoint.y);
+//            }
+//        }
+//        // 渲染路径
+//        CGContextStrokePath(context);
+//    }
+//    
+//    if (_aPoints.count != 0) {
+//        [[UIColor whiteColor] setStroke];
+//        CGContextRef context = UIGraphicsGetCurrentContext();
+//
+//        for (NSMutableArray *thisStroke in _aPoints) {
+//            CGContextSetLineWidth(context, 30);
+//
+//            // 路径起点
+//            CGPoint startPoint = CGPointFromString(thisStroke[0]);
+//            CGContextMoveToPoint(context, startPoint.x, startPoint.y);
+//            // 划线
+//            for (NSInteger i = 1; i < thisStroke.count; i++) {
+//                CGPoint movePoint = CGPointFromString(thisStroke[i]);
+//                CGContextAddLineToPoint(context, movePoint.x, movePoint.y);
+//
+//            }
+//        }
+//        CGContextStrokePath(context);
+// 
+//    }
+//
+//
+//}
 
 
 

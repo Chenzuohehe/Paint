@@ -16,6 +16,7 @@
 @property (weak, nonatomic) IBOutlet UIView *testView;
 @property (weak, nonatomic) IBOutlet PaintBoard *patintView;
 
+
 @end
 
 @implementation ViewController
@@ -40,4 +41,10 @@
     self.patintView.penColor = [UIColor colorWithRed:self.redSlider.value green:self.greenSlider.value blue:self.blueSlider.value alpha:1];
 }
 
+- (IBAction)removeAll:(id)sender {
+    
+    [self.patintView.allPoints removeAllObjects];
+    [self.patintView setNeedsDisplay];
+    
+}
 @end
