@@ -10,38 +10,33 @@
 
 @implementation PaintBoard
 {
-    
-    NSMutableArray *_points;// 保存路径的数组
     UIButton *_rubber;
-    
-    NSMutableArray *_aPoints;// 保存橡皮擦的路径的数组
-    
-    
 }
 
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-        _points = [NSMutableArray new];
-        _aPoints = [NSMutableArray new];
         self.allPoints = [NSMutableArray array];
         [self createRubber];
+        self.lineWidht = 10;
     }
     return self;
 }
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
     if (self = [super initWithCoder:aDecoder]) {
-        _points = [NSMutableArray new];
-        _aPoints = [NSMutableArray new];
         self.allPoints = [NSMutableArray array];
         [self createRubber];
+        self.lineWidht = 10;
     }
     
     return self;
 }
 
+/**
+ *  创建橡皮擦（橡皮擦也是画笔）
+ */
 - (void)createRubber
 {
     _rubber = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -51,12 +46,50 @@
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pressPan:)];
     [_rubber addGestureRecognizer:pan];
     [self addSubview:_rubber];
-    self.lineWidht = 10;
+    
     
 }
 
+/**
+ *  画笔点击，一条线段的开始
+ *
+ *  @param color 线段的颜色
+ *  @param widht 线条的宽度
+ *  @param arr   线段的坐标数组
+ */
+- (void)penDrawWithColor:(UIColor *)color lineWidht:(CGFloat)widht pointArr:(NSMutableArray *)arr
+{
+    NSMutableDictionary * strokeDic = [NSMutableDictionary dictionary];
+    [strokeDic setObject:arr forKey:@"path"];
+    [strokeDic setObject:color forKey:@"penColor"];
+    
+    [self.allPoints addObject:strokeDic];
+    [strokeDic setObject:[NSString stringWithFormat:@"%f",widht] forKey:@"lineWidth"];
+    [self setNeedsDisplay];
+}
+
+/**
+ *  画笔移动
+ *
+ *  @param point 画笔坐标
+ */
+- (void)penMovePoint:(CGPoint)point{
+    NSMutableDictionary * strokeDic = [self.allPoints lastObject];
+    NSMutableArray * strokeArr = strokeDic[@"path"];
+    [strokeArr addObject:NSStringFromCGPoint(point)];
+    [strokeDic setObject:strokeArr forKey:@"path"];
+    [self.allPoints removeLastObject];
+    [self.allPoints addObject:strokeDic];
+    [self setNeedsDisplay];
+}
+
+
 #pragma mark  ----- touchPaint ----
-//橡皮移动
+/**
+ *  橡皮移动
+ *
+ *  @param pan 拖动手势
+ */
 - (void)pressPan:(UIPanGestureRecognizer *)pan{
     
     static CGPoint oldPoint;
@@ -65,63 +98,25 @@
         oldPoint = [pan locationInView:self];
         NSMutableArray *thisStroke = [NSMutableArray new];
         [thisStroke addObject:NSStringFromCGPoint(_rubber.center)];
-        NSMutableDictionary * strokeDic = [NSMutableDictionary dictionary];
-        [strokeDic setObject:thisStroke forKey:@"path"];
-        [strokeDic setObject:[UIColor whiteColor] forKey:@"penColor"];
         
-        [self.allPoints addObject:strokeDic];
-        self.lineWidht = 40;
-        [strokeDic setObject:[NSString stringWithFormat:@"%f",self.lineWidht] forKey:@"lineWidth"];
-        [self setNeedsDisplay];
+        [self penDrawWithColor:[UIColor whiteColor] lineWidht:40 pointArr:thisStroke];
+        
     }else{
-        CGPoint newPoint = [pan locationInView:self];
+        CGPoint newPoint = [pan locationInView:self];//橡皮的新位置？
         //        CGPoint point = [_rubber convertPoint:newPoint toView:self];
         CGPoint center = _rubber.center;
         center.x += (newPoint.x - oldPoint.x);
         center.y += (newPoint.y - oldPoint.y);
         _rubber.center = center;
-        
+        oldPoint = newPoint;
         
         //橡皮滑动。
-        NSMutableDictionary * strokeDic = [self.allPoints lastObject];
-        NSMutableArray * strokeArr = strokeDic[@"path"];
-        [strokeArr addObject:NSStringFromCGPoint(_rubber.center)];
-        [strokeDic setObject:strokeArr forKey:@"path"];
-        [self.allPoints removeLastObject];
-        [self.allPoints addObject:strokeDic];
-        oldPoint = newPoint;
-        // drawRect方法 不能直接调用 间接调用
-        [self setNeedsDisplay];
+        [self penMovePoint:_rubber.center];
         
     }
     
 }
-//- (void)pressPan:(UIPanGestureRecognizer *)pan{
-//    static CGPoint oldPoint;
-//    //橡皮按住。。
-//    if (pan.state == UIGestureRecognizerStateBegan) {
-//        oldPoint = [pan locationInView:self];
-//        NSMutableArray *arr = [NSMutableArray new];
-//        [_aPoints addObject:arr];
-//    }
-//    else {
-//        //橡皮滑动
-//        CGPoint newPoint = [pan locationInView:self];
-////        CGPoint point = [_rubber convertPoint:newPoint toView:self];
-//        CGPoint center = _rubber.center;
-//        center.x += (newPoint.x - oldPoint.x);
-//        center.y += (newPoint.y - oldPoint.y);
-//        _rubber.center = center;
-//        NSMutableArray *arr = _aPoints.lastObject;
-//        [arr addObject:NSStringFromCGPoint(newPoint)];
-//
-//        oldPoint = newPoint;
-//        NSLog(@"%@",NSStringFromCGPoint(oldPoint));
-////        NSLog(@"%ld", _aPoints.count);
-//        [self setNeedsDisplay];
-//
-//    }
-//}
+
 
 // 一个笔画开始(点击)
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -134,19 +129,11 @@
     NSMutableArray *thisStroke= [NSMutableArray new];
     [thisStroke addObject:NSStringFromCGPoint(point)];
     self.lineWidht = 10;
-    
-    NSMutableDictionary * strokeDic = [NSMutableDictionary dictionary];
-    
     if (_penColor ==nil) {
         _penColor = [UIColor blackColor];
     }
+    [self penDrawWithColor:_penColor lineWidht:self.lineWidht pointArr:thisStroke];
     
-    [strokeDic setObject:_penColor forKey:@"penColor"];
-    [strokeDic setObject:thisStroke forKey:@"path"];
-    [strokeDic setObject:[NSString stringWithFormat:@"%f",self.lineWidht] forKey:@"lineWidth"];
-    [self.allPoints addObject:strokeDic];
-    
-    [self setNeedsDisplay];
 }
 
 // 手指移动
@@ -154,16 +141,8 @@
 {
     UITouch *touch = [touches anyObject];
     CGPoint point = [touch locationInView:self];
-    
-    NSMutableDictionary * strokeDic = [self.allPoints lastObject];
-    NSMutableArray * strokeArr = strokeDic[@"path"];
-    [strokeArr addObject:NSStringFromCGPoint(point)];
-    [strokeDic setObject:strokeArr forKey:@"path"];
-    [self.allPoints removeLastObject];
-    [self.allPoints addObject:strokeDic];
-    
-    // drawRect方法 不能直接调用 间接调用//这就是重画啊！！！！
-    [self setNeedsDisplay];
+
+    [self penMovePoint:point];
 }
 
 
@@ -194,85 +173,10 @@
             for (int i = 0; i < strokeArr.count; i++) {
                 CGPoint movePoint = CGPointFromString(strokeArr[i]);
                 CGContextAddLineToPoint(context, movePoint.x, movePoint.y);
-                
-                
             }
-            NSLog(@"%f",width);
             CGContextStrokePath(context);
         }
     }
-}
-
-//- (void)drawRect:(CGRect)rect {
-//    // Drawing code
-//    
-//    if (_points.count == 0) {
-//        return;
-//    }
-//    else {
-//        [self.penColor setStroke];//这是设置渲染的颜色
-//        
-//        //获取自己创建的位图上下文
-//        CGContextRef context = UIGraphicsGetCurrentContext();
-//        for (NSMutableArray *thisStroke in _points) {
-//            CGContextSetLineWidth(context, 1);
-//
-//            // 路径起点
-//            CGPoint startPoint = CGPointFromString(thisStroke[0]);
-//            CGContextMoveToPoint(context, startPoint.x, startPoint.y);
-//            // 划线
-//            for (NSInteger i = 1; i < thisStroke.count; i++) {
-//                CGPoint movePoint = CGPointFromString(thisStroke[i]);
-//                CGContextAddLineToPoint(context, movePoint.x, movePoint.y);
-//            }
-//        }
-//        // 渲染路径
-//        CGContextStrokePath(context);
-//    }
-//    
-//    if (_aPoints.count != 0) {
-//        [[UIColor whiteColor] setStroke];
-//        CGContextRef context = UIGraphicsGetCurrentContext();
-//
-//        for (NSMutableArray *thisStroke in _aPoints) {
-//            CGContextSetLineWidth(context, 30);
-//
-//            // 路径起点
-//            CGPoint startPoint = CGPointFromString(thisStroke[0]);
-//            CGContextMoveToPoint(context, startPoint.x, startPoint.y);
-//            // 划线
-//            for (NSInteger i = 1; i < thisStroke.count; i++) {
-//                CGPoint movePoint = CGPointFromString(thisStroke[i]);
-//                CGContextAddLineToPoint(context, movePoint.x, movePoint.y);
-//
-//            }
-//        }
-//        CGContextStrokePath(context);
-// 
-//    }
-//
-//
-//}
-
-
-
-//- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
-//{
-//    [super pointInside:point withEvent:event];
-//    return YES;
-//}
-
-//- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
-//{
-//    if (CGRectContainsPoint(_rubber.frame, point)) {
-//        return self;
-//    }
-//    return [super hitTest:point withEvent:event];
-//}
-
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    
 }
 
 @end
