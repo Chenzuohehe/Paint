@@ -128,7 +128,7 @@
     // 一个数组代表一个完整的线  起点
     NSMutableArray *thisStroke= [NSMutableArray new];
     [thisStroke addObject:NSStringFromCGPoint(point)];
-    self.lineWidht = 10;
+    self.lineWidht = self.lineWidht;
     if (_penColor ==nil) {
         _penColor = [UIColor blackColor];
     }

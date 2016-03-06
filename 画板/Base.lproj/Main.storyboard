@@ -38,10 +38,10 @@
                                         <color key="thumbTintColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     </slider>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ih8-71-rLv">
-                                        <rect key="frame" x="131" y="17" width="23" height="118"/>
+                                        <rect key="frame" x="131" y="17" width="20" height="118"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="23" id="Ght-Iw-Vmj"/>
+                                            <constraint firstAttribute="width" constant="20" id="Ght-Iw-Vmj"/>
                                             <constraint firstAttribute="height" constant="118" id="q05-ys-zia"/>
                                         </constraints>
                                     </view>
@@ -60,17 +60,45 @@
                                             <action selector="removeAll:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="ZD3-6C-WrL"/>
                                         </connections>
                                     </button>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="20" minValue="0.0" maxValue="20" translatesAutoresizingMaskIntoConstraints="NO" id="KDh-5d-uVP">
+                                        <rect key="frame" x="7" y="147" width="116" height="31"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="112" id="PQ5-b3-T4Y"/>
+                                            <constraint firstAttribute="height" constant="30" id="mcS-dG-Smn"/>
+                                        </constraints>
+                                    </slider>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="20" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ocl-l5-rFE">
+                                        <rect key="frame" x="129" y="151" width="42" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="Ksw-Xe-sBi"/>
+                                            <constraint firstAttribute="width" constant="42" id="c1g-40-1VB"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xgy-4h-R0B">
+                                        <rect key="frame" x="178" y="55" width="128" height="30"/>
+                                        <state key="normal" title="保存画作"/>
+                                        <connections>
+                                            <action selector="saveImage:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="rGq-Ft-kbo"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstItem="Ocl-l5-rFE" firstAttribute="leading" secondItem="KDh-5d-uVP" secondAttribute="trailing" constant="8" id="3jJ-ww-ErM"/>
                                     <constraint firstItem="ih8-71-rLv" firstAttribute="leading" secondItem="aKp-0i-08H" secondAttribute="trailing" constant="8" id="68I-Zv-zkm"/>
+                                    <constraint firstItem="KDh-5d-uVP" firstAttribute="top" secondItem="aKp-0i-08H" secondAttribute="bottom" constant="12" id="68g-nL-KQ8"/>
                                     <constraint firstItem="ih8-71-rLv" firstAttribute="top" secondItem="5Kd-GO-nYA" secondAttribute="top" constant="17" id="6sM-yy-lI7"/>
                                     <constraint firstItem="ZMe-bg-z6c" firstAttribute="top" secondItem="Rv6-Ey-gtk" secondAttribute="bottom" constant="14" id="8Eu-Cz-AJu"/>
                                     <constraint firstItem="aKp-0i-08H" firstAttribute="leading" secondItem="5Kd-GO-nYA" secondAttribute="leading" constant="9" id="CK8-eD-N1g"/>
                                     <constraint firstItem="Rv6-Ey-gtk" firstAttribute="top" secondItem="5Kd-GO-nYA" secondAttribute="top" constant="17" id="GJp-Xe-8gJ"/>
                                     <constraint firstItem="aKp-0i-08H" firstAttribute="top" secondItem="ZMe-bg-z6c" secondAttribute="bottom" constant="14" id="WNY-DO-V0l"/>
                                     <constraint firstItem="Rv6-Ey-gtk" firstAttribute="leading" secondItem="5Kd-GO-nYA" secondAttribute="leading" constant="9" id="d5P-OL-a91"/>
+                                    <constraint firstItem="Ocl-l5-rFE" firstAttribute="top" secondItem="ih8-71-rLv" secondAttribute="bottom" constant="16" id="eup-hk-Zul"/>
                                     <constraint firstItem="ZMe-bg-z6c" firstAttribute="leading" secondItem="5Kd-GO-nYA" secondAttribute="leading" constant="9" id="fbH-mn-myy"/>
+                                    <constraint firstItem="KDh-5d-uVP" firstAttribute="leading" secondItem="5Kd-GO-nYA" secondAttribute="leading" constant="9" id="xvq-Cb-ijY"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -87,7 +115,10 @@
                         <outlet property="greenSlider" destination="ZMe-bg-z6c" id="62T-hT-4gn"/>
                         <outlet property="patintView" destination="5Kd-GO-nYA" id="mVf-Ug-wj4"/>
                         <outlet property="redSlider" destination="Rv6-Ey-gtk" id="5lH-MY-QWV"/>
+                        <outlet property="sizeLabel" destination="Ocl-l5-rFE" id="nbp-h0-K3z"/>
+                        <outlet property="sizeSlider" destination="KDh-5d-uVP" id="cFT-ud-nhe"/>
                         <outlet property="testView" destination="ih8-71-rLv" id="Rck-pS-YV3"/>
+                        <outlet property="testViewWidth" destination="Ght-Iw-Vmj" id="cPq-0l-hHX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
